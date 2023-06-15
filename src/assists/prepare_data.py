@@ -1,18 +1,16 @@
-#读入csv文件到列表
 import csv
-import os
+import numpy as np
 
 class PrepareData:
     @staticmethod
-    def readData(path):
+    def read_data(path):
         price=[]
         with open(path, 'r', encoding="utf-8") as f:
-            gtReader = csv.reader(f, delimiter=',')  # csv parser for annotations file
+            # get csv parser for annotations file
+            gtReader = csv.reader(f, delimiter=',')
             for row in gtReader:
-                print(row)
-                # if ','.join(row).split(',')[1]=="":
-                #     continue
-                # else:
-                #     price.append(float(','.join(row).split(',')[1]))
-
-        return price
+                if ','.join(row).split(',')[0]=="":
+                    continue
+                else:
+                    price.append(float(','.join(row).split(',')[0]))
+        return np.array(price)

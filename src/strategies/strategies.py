@@ -1,45 +1,72 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from indexes.indexes import Indexes
-import configs.configs
+from configs import configs
 plt.style.use('fivethirtyeight')
 
 
 class Strategy:
+    # method to judge if need buy
+    @staticmethod
+    def need_buy(macd,signal,rsi):
+        return macd > signal and rsi>=configs.RSI_UPPER
+    
+    # method to judge if need sell
+    @staticmethod
+    def need_sell(macd,signal,rsi):
+        return macd < signal and rsi<=configs.RSI_LOWER
+    
+    # method to get all signals
     @staticmethod
     def get_buy_sell_signal(high,low,close):
         # get macd signal
         macd, signal, hist=Indexes.MACD(close)
+        # get rsi signal
         rsi = Indexes.RSI(close)
-        
-
+        # get adx signal
+        adx = Indexes.ADX(high,low,close)
+        # prepare buy and sell signal
         buy = []
         sell = []
-        flag = -1
-        itmp=-100
-        for i in range(0, len(signal)):
-            if macd[i] > signal[i] and rsi[i]>=60:
-                if i-itmp>=30:
-                    sell.append(np.nan)
-                    # 买入信号
-                    buy.append(close[i])
-                    itmp=i
-                    flag=0
-                else:
-                    buy.append(np.nan)
-                    sell.append(np.nan)
-            elif macd[i] < signal[i] and rsi[i]<=40:
-                if flag==0:
-                    buy.append(np.nan)
-                # 卖出信号
-                    sell.append(close[i])
-                    itmp=-100
-                    flag=-1
-                else:
-                    buy.append(np.nan)
-                    sell.append(np.nan)
+        # to avoid not buy anything but to sell, in this case, when we sell, we sell all the stock we have
+        if_has_buy = False
+        # to avoid buy and sell in a short time
+        last_buy_index=configs.BUY_INIT_INDEX
+        for i in range(len(close)):
+            if Strategy.need_buy(macd[i],signal[i],rsi[i]) and i-last_buy_index>=configs.BUY_SELL_PERIOD:
+                # buy here!
+                sell.append(np.nan)
+                buy.append(close[i])
+                last_buy_index=i
+                if_has_buy=True
+            elif Strategy.need_sell(macd[i],signal[i],rsi[i]) and if_has_buy:
+                # sell here!
+                buy.append(np.nan)
+                sell.append(close[i])
+                last_buy_index=configs.BUY_INIT_INDEX
+                if_has_buy=False
             else:
+                # do nothing
                 buy.append(np.nan)
                 sell.append(np.nan)
+        return buy, sell, rsi,adx
+    
+    @staticmethod
+    def get_all_num(close,predict,buy,sell,rsi,adx,init_money=configs.INIT_MONEY):
+        res=[]
+        money=init_money
+        stock=0
+        for i in range(len(close)):
+            if not (np.isnan(buy[i]) or np.isnan(rsi[i]) or np.isnan(adx[i])) and money>0:
+                # num is selected by rsi and adx
+                transfer_money=money*rsi[i]/adx[i]
+                money=money-transfer_money
+                stock=stock+transfer_money/close[i]
+            elif not (np.isnan(sell[i]) or np.isnan(rsi[i]) or np.isnan(adx[i])):
+                transfer_money=stock*close[i]
+                money=money+transfer_money
+                stock=0
                 
-        return buy, sell
+            res.append(money+stock*close[i])
+            
+        return res

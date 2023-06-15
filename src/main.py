@@ -1,5 +1,18 @@
 from strategies.strategies import Strategy
+from predict.predict import Predict
 from assists.prepare_data import PrepareData
+from assists.pic import Pic
+from indexes.indexes import Indexes
+from configs import configs
 
-PrepareData.readData("../data/data.csv")
-
+if __name__=="__main__":
+    data=PrepareData.read_data(configs.DATA_PATH)
+    buy,sell,rsi,adx=Strategy.get_buy_sell_signal(data,data,data)
+    # Pic.show_signal(data,buy,sell)
+    predict=Predict.predict(data)
+    # Pic.show_predict(data,predict)
+    money=Strategy.get_all_num(data,predict,buy,sell,rsi,adx)
+    # Pic.show_money(res)
+    Pic.show_all(money,data,predict)
+    # get final money
+    print(money[-1])
