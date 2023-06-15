@@ -25,6 +25,8 @@ class Strategy:
         rsi = Indexes.RSI(close)
         # get adx signal
         adx = Indexes.ADX(high,low,close)
+        # get atr signal
+        atr = Indexes.ATR(high,low,close)
         # prepare buy and sell signal
         buy = []
         sell = []
@@ -49,10 +51,10 @@ class Strategy:
                 # do nothing
                 buy.append(np.nan)
                 sell.append(np.nan)
-        return buy, sell, rsi,adx
+        return buy, sell, rsi, adx, atr
     
     @staticmethod
-    def get_all_num(close,predict,buy,sell,rsi,adx,init_money=configs.INIT_MONEY):
+    def get_all_num(close,predict,buy,sell,rsi,adx,atr,init_money=configs.INIT_MONEY):
         res=[]
         money=init_money
         stock=0
@@ -60,6 +62,8 @@ class Strategy:
             if not (np.isnan(buy[i]) or np.isnan(rsi[i]) or np.isnan(adx[i])) and money>0:
                 # num is selected by rsi and adx
                 transfer_money=money*rsi[i]/adx[i]
+                # num is selected by atr
+                # transfer_money=money*configs.ATR_RATIO/atr[i]
                 money=money-transfer_money
                 stock=stock+transfer_money/close[i]
             elif not (np.isnan(sell[i]) or np.isnan(rsi[i]) or np.isnan(adx[i])):

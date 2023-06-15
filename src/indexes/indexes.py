@@ -18,7 +18,7 @@ class Indexes:
     
     # 平均方向性运动指标
     @staticmethod
-    def ADX(high, low, close, timeperiod=14):
+    def ADX(high, low, close, timeperiod=configs.ADX_PERIOD):
         return talib.ADX(high, low, close, timeperiod=timeperiod)
     
     # 停损指标
@@ -28,19 +28,23 @@ class Indexes:
     
     # 威廉指标
     @staticmethod
-    def WILLR(high, low, close, timeperiod=14):
+    def WILLR(high, low, close, timeperiod=configs.WILLR_PERIOD):
         return talib.WILLR(high, low, close, timeperiod=timeperiod)
     
     # 随机指标
     @staticmethod
-    def KDJ(high, low, close, fastk_period=9, slowk_period=3, slowd_period=3):
+    def KDJ(high, low, close, fastk_period=configs.KDJ_FASTK_PERIOD, slowk_period=configs.KDJ_SLOWK_PERIOD, slowd_period=configs.KDJ_SLOWD_PERIOD):
         slowk, slowd = talib.STOCH(
             high, low, close, fastk_period=fastk_period, slowk_period=slowk_period, slowd_period=slowd_period)
         return slowk, slowd
     
+    @staticmethod
+    def ATR(high, low, close, timeperiod=configs.ATR_PERIOD):
+        return talib.ATR(high, low, close, timeperiod=timeperiod)
+    
     # 中间意愿指标
     @staticmethod
-    def CR(high, low, close, timeperiod=26, type=0):
+    def CR(high, low, close, timeperiod=configs.CR_PERIOD, type=0):
         M_0=high+low+2*close/4
         M_1=high+low+close/3
         M_2=high+low/2
