@@ -55,4 +55,16 @@ class Indexes:
         CR= [np.nan if i<timeperiod else 100*P_1[i]/(P_1[i]+P_2[i]) for i in range(len(M))]
         return CR
         
+    @staticmethod
+    def get_markowitz(closes):
+        # we need assert all closes has same length
+        # caculate annualized returns
+        annualized_returns = np.array([((close[-1] - close[0]) / close[0]) for close in closes])
+        # calculate covariance matrix
+        cov_matrix = np.cov(closes)
+        # caculate sharpe ratio
+        sharpe_ratio = annualized_returns / np.sqrt(np.diag(cov_matrix))
+        # calculate optimal weights
+        optimal_weights = sharpe_ratio / np.sum(sharpe_ratio)
+        return optimal_weights
         

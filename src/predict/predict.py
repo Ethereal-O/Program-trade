@@ -24,3 +24,6 @@ class Predict:
         predict=model.predict(configs.START_PREDICT_INDEX)
         return [0 if i<len(close)-len(predict) else predict[i-len(close)+len(predict)] for i in range(len(close))]
 
+    @staticmethod
+    def predict_all(closes):
+        return [Predict.predict(close) for close in closes]

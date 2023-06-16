@@ -54,7 +54,23 @@ class Strategy:
         return buy, sell, rsi, adx, atr
     
     @staticmethod
-    def get_all_num(close,predict,buy,sell,rsi,adx,atr,init_money=configs.INIT_MONEY):
+    def get_all_buy_sell_signal(highs,lows,closes):
+        buys=[]
+        sells=[]
+        rsis=[]
+        adxs=[]
+        atrs=[]
+        for i in range(len(closes)):
+            buy,sell,rsi,adx,atr=Strategy.get_buy_sell_signal(highs[i],lows[i],closes[i])
+            buys.append(buy)
+            sells.append(sell)
+            rsis.append(rsi)
+            adxs.append(adx)
+            atrs.append(atr)
+        return buys,sells,rsis,adxs,atrs
+
+    @staticmethod
+    def get_single_num(close,predict,buy,sell,rsi,adx,atr,weight,init_money=configs.INIT_MONEY):
         res=[]
         money=init_money
         stock=0
@@ -74,16 +90,10 @@ class Strategy:
             res.append(money+stock*close[i])
             
         return res
-    
+
     @staticmethod
-    def get_markowitz(closes):
-        # we need assert all closes has same length
-        # caculate annualized returns
-        annualized_returns = np.array([((close[-1] - close[0]) / close[0]) * 252 for close in closes])
-        # calculate covariance matrix
-        cov_matrix = np.cov(closes)
-        # caculate sharpe ratio
-        sharpe_ratio = annualized_returns / np.sqrt(np.diag(cov_matrix))
-        # calculate optimal weights
-        optimal_weights = sharpe_ratio / np.sum(sharpe_ratio)
-        return optimal_weights
+    def get_all_num(closes,predict,buys,sells,rsis,adxs,atrs,weights,init_money=configs.INIT_MONEY):
+        res=[]
+        for i in range(len(closes)):
+            res.append(Strategy.get_single_num(closes[i],predict[i],buys[i],sells[i],rsis[i],adxs[i],atrs[i],weights[i],init_money*weights[i]))
+        return res

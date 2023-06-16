@@ -40,12 +40,11 @@ class Pic:
         plt.show()
         
     @staticmethod
-    def show_all(money,close,predict,show_period=configs.PIC_SHOW_PERIOD):
+    def show_all(money,close,show_period=configs.PIC_SHOW_PERIOD):
         plt.figure(figsize=configs.PIC_FIGURE_SIZE)
         plt.plot(close[-show_period:], label='Close Price', alpha=0.35)
-        plt.plot(predict[-show_period:], label='Predict Price', alpha=0.35)
         plt.plot(money[-show_period:], label='Money', alpha=0.35)
-        plt.title('Close Prcie & Predict Price & Money')
+        plt.title('Close Prcie & Money')
         plt.xlabel('Date', fontsize=18)
         plt.ylabel('Price', fontsize=18)
         plt.legend(loc='upper left')
