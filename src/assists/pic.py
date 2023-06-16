@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from configs import configs
+import seaborn as sns
 
 
 class Pic:
@@ -48,4 +49,11 @@ class Pic:
         plt.xlabel('Date', fontsize=18)
         plt.ylabel('Price', fontsize=18)
         plt.legend(loc='upper left')
+        plt.show()
+
+    @staticmethod
+    def show_correlation_matrix(correlation_matrix):
+        sns.heatmap(correlation_matrix,annot=True,cmap='rainbow',linewidths=1.0,annot_kws={'size':8})
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=0)
         plt.show()

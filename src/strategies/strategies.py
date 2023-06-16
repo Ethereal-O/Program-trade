@@ -74,3 +74,16 @@ class Strategy:
             res.append(money+stock*close[i])
             
         return res
+    
+    @staticmethod
+    def get_markowitz(closes):
+        # we need assert all closes has same length
+        # caculate annualized returns
+        annualized_returns = np.array([((close[-1] - close[0]) / close[0]) * 252 for close in closes])
+        # calculate covariance matrix
+        cov_matrix = np.cov(closes)
+        # caculate sharpe ratio
+        sharpe_ratio = annualized_returns / np.sqrt(np.diag(cov_matrix))
+        # calculate optimal weights
+        optimal_weights = sharpe_ratio / np.sum(sharpe_ratio)
+        return optimal_weights
