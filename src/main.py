@@ -7,6 +7,7 @@ from configs import configs
 
 if __name__=="__main__":
     data=PrepareData.read_data(configs.DATA_PATH)
+    # get if need buy and sell
     buy,sell,rsi,adx,atr=Strategy.get_buy_sell_signal(data,data,data)
     # Pic.show_signal(data,buy,sell)
     predict=Predict.predict(data)

@@ -61,7 +61,7 @@ class Strategy:
         for i in range(len(close)):
             if not (np.isnan(buy[i]) or np.isnan(rsi[i]) or np.isnan(adx[i])) and money>0:
                 # num is selected by rsi and adx
-                transfer_money=money*rsi[i]/adx[i]
+                transfer_money=min(money,money*rsi[i]/adx[i])
                 # num is selected by atr
                 # transfer_money=money*configs.ATR_RATIO/atr[i]
                 money=money-transfer_money
