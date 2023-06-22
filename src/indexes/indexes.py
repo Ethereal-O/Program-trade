@@ -1,6 +1,7 @@
 import talib
 from configs import configs
 import numpy as np
+from assists.timer import Timer
 
 
 class Indexes:
@@ -56,15 +57,19 @@ class Indexes:
         return CR
         
     @staticmethod
+    @Timer.clocker
     def get_markowitz(closes):
         # we need assert all closes has same length
         # caculate annualized returns
-        annualized_returns = np.array([((close[-1] - close[0]) / close[0]) for close in closes])
+        annualized_returns = np.array([((close[-1] - close[np.nonzero(close)[0][0]]) / close[np.nonzero(close)[0][0]]) for close in closes])
         # calculate covariance matrix
         cov_matrix = np.cov(closes)
         # caculate sharpe ratio
         sharpe_ratio = annualized_returns / np.sqrt(np.diag(cov_matrix))
         # calculate optimal weights
         optimal_weights = sharpe_ratio / np.sum(sharpe_ratio)
+        # make sure all weights are positive
+        optimal_weights = np.maximum(optimal_weights,0)
+        optimal_weights = optimal_weights / np.sum(optimal_weights)
         return optimal_weights
         
