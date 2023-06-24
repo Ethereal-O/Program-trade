@@ -21,6 +21,16 @@ class Printer:
     def print_clock(message):
         print(f"{Bcolors.WARNING}[Clock]{Bcolors.ENDC} {Bcolors.OKBLUE}%s{Bcolors.ENDC}" % (
             message))
+        
+    @staticmethod
+    def print_eval(message):
+        print(f"{Bcolors.OKGREEN}[Eval]{Bcolors.ENDC} {Bcolors.OKBLUE}%s{Bcolors.ENDC}" % (
+            message))
+    
+    @staticmethod
+    def print_train(message):
+        print(f"{Bcolors.OKCYAN}[Done]{Bcolors.ENDC} {Bcolors.OKBLUE}%s{Bcolors.ENDC}" % (
+            message))
 
     @staticmethod
     def print_other(message):

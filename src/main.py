@@ -11,7 +11,7 @@ from configs import configs
 if __name__ == "__main__":
     # read data
     Printer.print_step(1, "reading data...")
-    data = PrepareData.read_data(configs.DATA_PATH)
+    data = PrepareData.read_data(configs.DATA_PATH_XLSX)
     Printer.print_other(
         "Read data finished! Get data with shape: %s" % (data.shape,))
     # get if need buy and sell

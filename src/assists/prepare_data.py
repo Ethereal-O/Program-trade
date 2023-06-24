@@ -8,8 +8,11 @@ from assists.timer import Timer
 class PrepareData:
     @staticmethod
     @Timer.clocker
-    def read_data(path):
-        return PrepareData.read_data_xlsx(path)
+    def read_data(path, type="xlsx"):
+        if type == "csv":
+            return PrepareData.read_data_csv(path)
+        else:
+            return PrepareData.read_data_xlsx(path)
 
     @staticmethod
     def read_data_csv(path):

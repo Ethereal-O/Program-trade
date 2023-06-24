@@ -20,7 +20,8 @@ PIC_SHOW_PERIOD = 2000
 PIC_FIGURE_SIZE = (16, 8)
 
 # For data
-DATA_PATH = "./data/data.xlsx"
+DATA_PATH_CSV = "./data/data.csv"
+DATA_PATH_XLSX = "./data/data.xlsx"
 HEAD_NUM = 2
 INDEX_NUM = 1
 
@@ -35,3 +36,31 @@ ATR_RATIO = 100
 # For predict
 DIFF_TIMES = 2
 START_PREDICT_INDEX = 50
+
+# For env
+DEFAULT_ENV_NAME = "ENV_DEFAULT"
+STATE_PERIOD = 5
+EVAL_EPISODES = 10
+MIN_ACTION = -1
+MAX_ACTION = 1
+DATA_SCALE = 10000
+STOCK_SCALE = 10
+
+
+# For train
+SEED = 0                    # Sets Gym, PyTorch and Numpy seeds
+START_TIMESTEPS = 100       # Time steps initial random policy is used
+EVAL_FREQ = 300             # How often (time steps) we evaluate
+MAX_TIMESTEPS = 100000      # Max time steps to run environment
+EXPL_NOISE = 0.01           # Std of Gaussian exploration noise
+BATCH_SIZE =5               # Batch size for both actor and critic
+DISCOUNT = 0.99             # Discount factor
+TAU = 0.005                 # Target network update rate
+POLICY_NOISE = 0.01         # Noise added to target policy during critic update
+NOISE_CLIP = 0.01           # Range to clip target policy noise
+POLICY_FREQ = 2             # Frequency of delayed policy updates
+SAVE_MODEL = True           # Save model and optimizer parameters
+LOAD_MODEL = False          # Load model and optimizer parameters
+MODEL_PATH = "./results/ml/models/"
+RESULT_PATH = "./results/ml/results/"
+FILE_NAME = "TD3_"+DEFAULT_ENV_NAME
