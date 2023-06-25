@@ -22,8 +22,13 @@ PIC_FIGURE_SIZE = (16, 8)
 # For data
 DATA_PATH_CSV = "./data/data.csv"
 DATA_PATH_XLSX = "./data/data.xlsx"
+DATA_PATH_SELECT_XLSX = "./data/data_select.xlsx"
+SELECTED_DATA_NUM = 20
+FORCE_SELECT_DATA = False
 HEAD_NUM = 2
+SELECTED_HEAD_NUM = 0
 INDEX_NUM = 1
+SELECTED_INDEX_NUM = 0
 
 # For strategy
 RSI_UPPER = 60
@@ -32,6 +37,7 @@ BUY_SELL_PERIOD = 30
 BUY_INIT_INDEX = -100
 INIT_MONEY = 10000
 ATR_RATIO = 100
+MIN_DATA_ACCECPT_NUM = 30
 
 # For predict
 DIFF_TIMES = 2
@@ -45,15 +51,15 @@ MIN_ACTION = -1
 MAX_ACTION = 1
 DATA_SCALE = 10000
 STOCK_SCALE = 10
-
+SELL_NUM_SCALE = 0.1
 
 # For train
 SEED = 0                    # Sets Gym, PyTorch and Numpy seeds
 START_TIMESTEPS = 100       # Time steps initial random policy is used
 EVAL_FREQ = 300             # How often (time steps) we evaluate
-MAX_TIMESTEPS = 100000      # Max time steps to run environment
+MAX_TIMESTEPS = 10000       # Max time steps to run environment
 EXPL_NOISE = 0.01           # Std of Gaussian exploration noise
-BATCH_SIZE =5               # Batch size for both actor and critic
+BATCH_SIZE = 5              # Batch size for both actor and critic
 DISCOUNT = 0.99             # Discount factor
 TAU = 0.005                 # Target network update rate
 POLICY_NOISE = 0.01         # Noise added to target policy during critic update
@@ -64,3 +70,10 @@ LOAD_MODEL = False          # Load model and optimizer parameters
 MODEL_PATH = "./results/ml/models/"
 RESULT_PATH = "./results/ml/results/"
 FILE_NAME = "TD3_"+DEFAULT_ENV_NAME
+TRAIN_TEST_SPLIT = 1205
+
+# For mode
+MODE_TRAIN = "train"
+MODE_REPORT = "report"
+# MODE = MODE_TRAIN
+MODE = MODE_REPORT

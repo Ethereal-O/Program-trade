@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 from indexes.indexes import Indexes
 from configs import configs
 from assists.timer import Timer
+from deprecated import deprecated
 plt.style.use('fivethirtyeight')
 
 
@@ -95,6 +97,7 @@ class Strategy:
         return res
 
     @staticmethod
+    @deprecated(reason="we will use rl to get num")
     @Timer.clocker
     def get_all_num(closes, predict, buys, sells, rsis, adxs, atrs, weights, init_money=configs.INIT_MONEY):
         res = []
@@ -102,3 +105,25 @@ class Strategy:
             res.append(Strategy.get_single_num(
                 closes[i], predict[i], buys[i], sells[i], rsis[i], adxs[i], atrs[i], weights[i], init_money*weights[i]))
         return res
+
+    @staticmethod
+    def select_data(data):
+        # get all indexes
+        buys, sells, rsis, adxs, atrs = Strategy.get_all_buy_sell_signal(
+            data, data, data)
+        # we just use rsis and adxs to select data
+        rsis_devide_adxs = [sum(rsi[np.isfinite(
+            rsi)])/sum(adx[np.isfinite(adx)]) for rsi, adx in zip(rsis, adxs)]
+        # delete the data which is not good
+        rsis_devide_adxs = [index if sum(
+            single_data > 0) > configs.MIN_DATA_ACCECPT_NUM else -math.inf for index, single_data in zip(rsis_devide_adxs, data)]
+        # find first selected_num indexes
+        selected_indexes = np.argsort(
+            rsis_devide_adxs)[-configs.SELECTED_DATA_NUM:]
+        return selected_indexes
+
+    @staticmethod
+    def caculate_money(moneys, weights):
+        earn = [(money-configs.INIT_MONEY)*weight for money,
+                weight in zip(moneys, weights)]
+        return sum(earn)+configs.INIT_MONEY

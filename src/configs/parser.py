@@ -4,7 +4,8 @@ import argparse
 
 class Train_configs:
     def __init__(self):
-        self.data_path = configs.DATA_PATH_CSV
+        self.force_select_data = configs.FORCE_SELECT_DATA
+        self.data_path = configs.DATA_PATH_SELECT_XLSX
         self.env_name = configs.DEFAULT_ENV_NAME
         self.seed = configs.SEED
         self.start_timesteps = configs.START_TIMESTEPS
@@ -22,6 +23,16 @@ class Train_configs:
         self.model_path = configs.MODEL_PATH
         self.result_path = configs.RESULT_PATH
         self.file_name = configs.FILE_NAME
+        self.train_test_split = configs.TRAIN_TEST_SPLIT
+
+
+class Report_configs:
+    def __init__(self):
+        self.force_select_data = configs.FORCE_SELECT_DATA
+        self.env_name = configs.DEFAULT_ENV_NAME
+        self.train_test_split = configs.TRAIN_TEST_SPLIT
+        self.model_path = configs.MODEL_PATH
+        self.file_name = configs.FILE_NAME
 
 
 class Parser:
@@ -33,6 +44,8 @@ class Parser:
     def parse_train_configs():
         train_configs = Parser.parse_default_train_configs()
         parser = argparse.ArgumentParser()
+        parser.add_argument("--force_select_data",
+                            default=train_configs.force_select_data)
         parser.add_argument("--data_path", default=train_configs.data_path)
         parser.add_argument("--env_name", default=train_configs.env_name)
         parser.add_argument("--seed", default=train_configs.seed, type=int)
@@ -57,7 +70,10 @@ class Parser:
         parser.add_argument("--model_path", default=train_configs.model_path)
         parser.add_argument("--result_path", default=train_configs.result_path)
         parser.add_argument("--file_name", default=train_configs.file_name)
+        parser.add_argument("--train_test_split",
+                            default=train_configs.train_test_split)
         args = parser.parse_args()
+        train_configs.force_select_data = args.force_select_data
         train_configs.data_path = args.data_path
         train_configs.env_name = args.env_name
         train_configs.seed = args.seed
@@ -76,4 +92,28 @@ class Parser:
         train_configs.model_path = args.model_path
         train_configs.result_path = args.result_path
         train_configs.file_name = args.file_name
+        train_configs.train_test_split = args.train_test_split
         return train_configs
+
+    @staticmethod
+    def parse_default_report_configs():
+        return Report_configs()
+
+    @staticmethod
+    def parse_report_configs():
+        report_configs = Parser.parse_default_report_configs()
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--force_select_data",
+                            default=report_configs.force_select_data)
+        parser.add_argument("--env_name", default=report_configs.env_name)
+        parser.add_argument("--train_test_split",
+                            default=report_configs.train_test_split)
+        parser.add_argument("--model_path", default=report_configs.model_path)
+        parser.add_argument("--file_name", default=report_configs.file_name)
+        args = parser.parse_args()
+        report_configs.force_select_data = args.force_select_data
+        report_configs.env_name = args.env_name
+        report_configs.train_test_split = args.train_test_split
+        report_configs.model_path = args.model_path
+        report_configs.file_name = args.file_name
+        return report_configs

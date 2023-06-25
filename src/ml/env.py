@@ -85,6 +85,9 @@ class Env:
         return np.concatenate((state_period, state_money))
 
     def get_reward(self):
+        # for avoiding the agent not buy any but always sell to keep the money and achieve a high reward, we add a penalty for selling
+        return (self.money+self.stock*self.data[self.index]-configs.INIT_MONEY)/configs.INIT_MONEY-configs.SELL_NUM_SCALE*self.sell_num
+        # this is to make the num of buying and the num of selling a balance
         return (self.money+self.stock*self.data[self.index]-configs.INIT_MONEY)/configs.INIT_MONEY+1/((self.buy_num+1)/(self.sell_num+1)+(self.sell_num+1)/(self.buy_num+1))-0.5
 
     def get_money(self):
@@ -101,9 +104,11 @@ class Env:
                 avg_reward += reward
 
         avg_reward /= eval_episodes
-        
-        Printer.print_eval(f"evaluation over {eval_episodes} episodes: {avg_reward:.3f} money: {eval_env.get_money():.3f}")
-        return avg_reward
+        money = eval_env.get_money()
+
+        Printer.print_eval(
+            f"evaluation over {eval_episodes} episodes: {avg_reward:.3f} money: {money:.3f}")
+        return avg_reward, money
 
     def read_data(self):
         data = PrepareData.read_data(self.file_path)
