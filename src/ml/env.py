@@ -52,7 +52,7 @@ class Env:
             self.money = float(self.money-transfer_money)
             self.stock = float(self.stock+transfer_money/self.data[self.index])
             self.buy_num += 1
-        elif action < 0:
+        elif action < 0  and self.data[self.index] > 0:
             # sell the stock
             transfer_stock = min(self.stock, self.stock*(-action))
             self.money = float(self.money+transfer_stock*self.data[self.index])

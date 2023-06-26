@@ -70,7 +70,7 @@ LOAD_MODEL = False          # Load model and optimizer parameters
 MODEL_PATH = "./results/ml/models/"
 RESULT_PATH = "./results/ml/results/"
 FILE_NAME = "TD3_"+DEFAULT_ENV_NAME
-TRAIN_TEST_SPLIT = 1205
+TRAIN_TEST_SPLIT = 1000
 
 # For mode
 MODE_TRAIN = "train"
