@@ -86,7 +86,7 @@ class Env:
 
     def get_reward(self):
         # for avoiding the agent not buy any but always sell to keep the money and achieve a high reward, we add a penalty for selling
-        return (self.money+self.stock*self.data[self.index]-configs.INIT_MONEY)/configs.INIT_MONEY-configs.SELL_NUM_SCALE*self.sell_num
+        # return (self.money+self.stock*self.data[self.index]-configs.INIT_MONEY)/configs.INIT_MONEY-configs.SELL_NUM_SCALE*self.sell_num
         # this is to make the num of buying and the num of selling a balance
         return (self.money+self.stock*self.data[self.index]-configs.INIT_MONEY)/configs.INIT_MONEY+1/((self.buy_num+1)/(self.sell_num+1)+(self.sell_num+1)/(self.buy_num+1))-0.5
 

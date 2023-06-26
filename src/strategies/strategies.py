@@ -107,16 +107,35 @@ class Strategy:
         return res
 
     @staticmethod
+    def get_reserve_first_zero_index(data):
+        for i in range(len(data)-1, -1, -1):
+            if data[i] == 0:
+                return i
+        return -1
+
+    @staticmethod
+    def get_all_reserve_first_zero_index(data):
+        return [Strategy.get_reserve_first_zero_index(single_data) for single_data in data]
+
+    @staticmethod
     def select_data(data):
         # get all indexes
         buys, sells, rsis, adxs, atrs = Strategy.get_all_buy_sell_signal(
             data, data, data)
+        reserve_first_zero_indexs = Strategy.get_all_reserve_first_zero_index(
+            data)
         # we just use rsis and adxs to select data
+        rsis = [rsi[reserve_first_zero_index+1:] for rsi,
+                reserve_first_zero_index in zip(rsis, reserve_first_zero_indexs)]
+        adxs = [adx[reserve_first_zero_index+1:] for adx,
+                reserve_first_zero_index in zip(adxs, reserve_first_zero_indexs)]
         rsis_devide_adxs = [sum(rsi[np.isfinite(
-            rsi)])/sum(adx[np.isfinite(adx)]) for rsi, adx in zip(rsis, adxs)]
+            rsi)])*sum(adx[np.isfinite(adx)]) for rsi, adx in zip(rsis, adxs)]
         # delete the data which is not good
         rsis_devide_adxs = [index if sum(
             single_data > 0) > configs.MIN_DATA_ACCECPT_NUM else -math.inf for index, single_data in zip(rsis_devide_adxs, data)]
+        rsis_devide_adxs = [index if reserve_first_zero_index < configs.MIN_DATA_ACCECPT_SHOP_NUM else -
+                            math.inf for index, reserve_first_zero_index in zip(rsis_devide_adxs, reserve_first_zero_indexs)]
         # find first selected_num indexes
         selected_indexes = np.argsort(
             rsis_devide_adxs)[-configs.SELECTED_DATA_NUM:]
