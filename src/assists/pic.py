@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from configs import configs
 import seaborn as sns
+import numpy as np
 
 
 class Pic:
@@ -59,7 +60,7 @@ class Pic:
         plt.xticks(rotation=45)
         plt.yticks(rotation=0)
         plt.show()
-        
+
     @staticmethod
     def show_reward(reward):
         plt.figure(figsize=configs.PIC_FIGURE_SIZE)
@@ -69,3 +70,16 @@ class Pic:
         plt.ylabel('Reward', fontsize=18)
         plt.legend(loc='upper left')
         plt.show()
+
+    @staticmethod
+    def show_all_money_and_weights(moneys, weights):
+        xticks = np.arange(len(moneys))
+        fig, ax = plt.subplots(figsize=(10, 7))
+        ax.bar(xticks, moneys, width=0.25, label="Moneys", color="red")
+        ax.bar(xticks + 0.25, weights, width=0.25,
+               label="Weights", color="blue")
+        ax.set_title("Moneys and Weights", fontsize=15)
+        ax.set_xlabel("Index")
+        ax.set_ylabel("Rate")
+        ax.legend()
+        ax.set_xticks(xticks + 0.25)
