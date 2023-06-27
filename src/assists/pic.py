@@ -59,3 +59,13 @@ class Pic:
         plt.xticks(rotation=45)
         plt.yticks(rotation=0)
         plt.show()
+        
+    @staticmethod
+    def show_reward(reward):
+        plt.figure(figsize=configs.PIC_FIGURE_SIZE)
+        plt.plot(reward, label='Reward', alpha=0.35)
+        plt.title('Reward')
+        plt.xlabel('Time', fontsize=18)
+        plt.ylabel('Reward', fontsize=18)
+        plt.legend(loc='upper left')
+        plt.show()
