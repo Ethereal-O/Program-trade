@@ -4,6 +4,8 @@ from configs import configs
 import seaborn as sns
 import numpy as np
 
+plt.style.use("seaborn-ticks")
+
 
 class Pic:
     @staticmethod
@@ -55,7 +57,7 @@ class Pic:
 
     @staticmethod
     def show_correlation_matrix(correlation_matrix):
-        sns.heatmap(correlation_matrix, annot=True, cmap='rainbow',
+        sns.heatmap(correlation_matrix, annot=False, cmap='rainbow',
                     linewidths=1.0, annot_kws={'size': 8})
         plt.xticks(rotation=45)
         plt.yticks(rotation=0)
@@ -75,11 +77,12 @@ class Pic:
     def show_all_money_and_weights(moneys, weights):
         xticks = np.arange(len(moneys))
         fig, ax = plt.subplots(figsize=(10, 7))
-        ax.bar(xticks, moneys, width=0.25, label="Moneys", color="red")
+        ax.bar(xticks, np.array(moneys)/50000,
+               width=0.25, label="Moneys", color="red")
         ax.bar(xticks + 0.25, weights, width=0.25,
                label="Weights", color="blue")
         ax.set_title("Moneys and Weights", fontsize=15)
         ax.set_xlabel("Index")
         ax.set_ylabel("Rate")
         ax.legend()
-        ax.set_xticks(xticks + 0.25)
+        plt.show()
