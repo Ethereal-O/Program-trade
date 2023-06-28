@@ -2,7 +2,7 @@
 
 ## What is this
 
-This is a lab of cource *Program-trade*.
+This is a lab of course *Program-trade*.
 
 ## How to use
 
@@ -26,7 +26,7 @@ python -m venv venv-quant
 ./venv-quant/Scripts/python.exe ./src/main.py
 ```
 
-5. you can also run it with some args, for example run it as follow.
+5. you can also run it with some args, for example run it as bellow.
 
 ```shell
 ./venv-quant/Scripts/python.exe ./src/main.py --force_select_data=True
